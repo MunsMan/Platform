@@ -108,7 +108,8 @@ class BaseObject:
             if att[a] is None:
                 continue
             else:
-                att_json[a] = att[a]
+                att_json[a] = str(att[a])
+        print(att_json)
         return json.dumps(att_json)
 
     def load_from_json(self, j):
@@ -118,8 +119,10 @@ class BaseObject:
 
 
 if __name__ == '__main__':
-    FO = BaseObject("BaseSPS")
-    SO = BaseObject("SSPS")
+    FO = BaseObject("Aquarium")
+    SO = BaseObject("Pumpe")
+    FO.description = "Ich bin das Grundobjekt"
+    SO.description = "Ich bin die Pumpe"
     SO.bigger_node = FO
     FO.smaller_node = SO
     print(FO.smaller_node)
