@@ -109,8 +109,6 @@ class BaseObject:
                 continue
             else:
                 att_json[a] = att[a]
-        inspect.getmembers(self)
-        print(att_json)
         return json.dumps(att_json)
 
     def load_from_json(self, j):
