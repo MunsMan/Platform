@@ -20,6 +20,7 @@ class MQTTClient(BaseObject):
         """
         pass
 
+
 if __name__ == '__main__':
 
     c = MQTTClient()

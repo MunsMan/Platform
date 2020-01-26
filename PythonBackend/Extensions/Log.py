@@ -11,16 +11,19 @@ class Log:
     def get_name(self):
         return "Log-<"+str(self.id)+">.txt"
 
-    def create_log(self):
+    def __file_pos(self):
         path = os.path.dirname(__file__)
-        path = os.path.join(path, "log")
-        f = open(str(self.log_name), 'w+')
+        filepath = os.path.join(path, "..", "Logs", self.log_name)
+        return filepath
+
+    def create_log(self):
+        f = open(self.__file_pos(), 'w+')
         f.write("Log of {n}: \n".format(n=self.id))
         f.close()
 
     def log_post(self, post):
         log_head = str(time.asctime()) + ": " + str(post)
-        f = open(self.log_name, "a")
+        f = open(self.__file_pos(), "a")
         f.write(log_head)
         f.close()
 
