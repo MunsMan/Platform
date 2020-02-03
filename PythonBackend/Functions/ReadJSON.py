@@ -37,26 +37,37 @@ class JSONHandler:
         with open(self.path, 'w') as file:
             json.dump(self.file, file)
 
-    def list_of_endpoints(self):
-        endnote = []
+    def list_of_tree(self):
         tree_root = self.file["data"]
         return self._recursive_scan(tree_root, "root")
 
     def _recursive_scan(self, node, key):
         endnode = []
         nnode = node[key]
-        print(nnode)
         if nnode["nodes"] == {}:
-            print("True")
-            return key
+            endnode.append(key)
+            return endnode
         else:
+            endnode.append(key)
             for nkey in nnode["nodes"].keys():
                 endnode.append(self._recursive_scan(nnode["nodes"], nkey))
         return endnode
 
+    def create_object_model(self, object):
+        root = self.file["data"]
+        return self._recursive_object_model(object, root, "root")
 
+    def _recursive_object_model(self, object, node, key):
+        objects = []
+        new_obj = object(key)
+        if 'description' in node[key].keys():
+            new_obj.description = node[key]["description"]
+        if node[key]['nodes'] != {}:
+            print(node[key]['nodes'].keys())
+        objects.append(new_obj)
+        return objects
 
 if __name__ == '__main__':
     config = JSONHandler()
-    print(config.list_of_endpoints())
+    print(config.list_of_tree())
 
