@@ -1,0 +1,14 @@
+{
+  "name": "Platform",
+  "version": "0.0.1",
+  "repository": "https://github.com/MunsMan/Platform.git",
+  "private": true,
+  "dependencies": {
+    "browser-sync": "^2.26.3",
+    "gulp": "^4.0.0",
+    "gulp-sass": "^4.0.2"
+  },
+  "scripts": {
+    "watch": "gulp watch"
+  }
+}

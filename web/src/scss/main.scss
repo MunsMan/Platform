@@ -1,0 +1,15 @@
+@import "helpers/_1variables";
+@import "helpers/_include-media";
+@import "helpers/slick";
+
+* {
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
