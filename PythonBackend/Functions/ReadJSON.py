@@ -53,18 +53,20 @@ class JSONHandler:
                 endnode.append(self._recursive_scan(nnode["nodes"], nkey))
         return endnode
 
-    def create_object_model(self, object):
+    def create_object_model(self, base_object):
         root = self.file["data"]
-        return self._recursive_object_model(object, root, "root")
+        return self._recursive_object_model(base_object, root, "root")
 
-    def _recursive_object_model(self, object, node, key):
-        objects = []
-        new_obj = object(key)
+    def _recursive_object_model(self, base_object, node, key):
+        new_obj = base_object(key)
+        objects = [new_obj]
         if 'description' in node[key].keys():
             new_obj.description = node[key]["description"]
         if node[key]['nodes'] != {}:
-            print(node[key]['nodes'].keys())
-        objects.append(new_obj)
+            for nkey in node[key]['nodes'].keys():
+                nnode = self._recursive_object_model(base_object, node[key]['nodes'], nkey)
+                new_obj.smaller_node = nnode[0]
+                objects.append(nnode)
         return objects
 
 if __name__ == '__main__':
