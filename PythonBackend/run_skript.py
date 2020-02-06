@@ -1,5 +1,7 @@
 from Objects import BaseObject
-from Functions import JSONHandler
+from Functions import JSONHandler, SpecialPrint
 
-fjson = JSONHandler().create_object_model(BaseObject)
+fjson = JSONHandler().list_of_tree()
 print(fjson)
+P = SpecialPrint()
+P.print_tree(fjson)
