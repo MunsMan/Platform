@@ -69,6 +69,35 @@ class JSONHandler:
                 objects.append(nnode)
         return objects
 
+
+class SpecialPrint:
+    def __init__(self):
+        pass
+
+    def print_tree(self, tree):
+        level = 0
+        self._re_print(tree, level)
+
+    def _re_print(self, node, level):
+        level += 1
+        self.__p_arm(node[0], level)
+        if len(node) > 2:
+            for n in node[1:]:
+                self._re_print(n, level)
+        elif len(node) == 1:
+            return True
+        else:
+            self._re_print(node[1], level)
+
+    @staticmethod
+    def __p_arm(name, level):
+        print("-" * level, name)
+
+def cal_topic(tree, name, node):
+
+
+
+
 if __name__ == '__main__':
     config = JSONHandler()
     print(config.list_of_tree())
