@@ -1,6 +1,14 @@
 @import "helpers/_1variables";
 @import "helpers/_include-media";
 @import "helpers/slick";
+@import "helpers/menu";
+
+/*
+#
+!   Index
+ */
+
+@import "views/index/overview";
 
 * {
   box-sizing: border-box;
@@ -12,4 +20,9 @@
 body {
   margin: 0;
   padding: 0;
+}
+
+.section_content {
+  max-width: 1600px;
+  padding: 100px 50px;
 }
