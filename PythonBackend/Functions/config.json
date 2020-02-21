@@ -1,0 +1,41 @@
+{
+  "name": "TestPi",
+  "data": {
+    "root": {
+      "description": "Root Element",
+      "nodes": {
+        "INTERN": {
+          "description": "Für interne Sensorik",
+          "nodes": {
+            "CPU": {
+              "description": "Informationen über die SPS",
+              "nodes": {
+                "USAGE": {
+                  "data": {
+                    "unit": "%"
+                  },
+                  "description": "Auslastung der CPU in Prozent",
+                  "nodes": {}
+                },
+                "TEMP": {
+                  "data": {
+                    "unit": "°C"
+                  },
+                  "description": "Temperatur der CPU in Grad Celius",
+                  "nodes": {}
+                }
+              }
+            },
+            "RAM": {
+              "data": {
+                "unit": "%"
+              },
+              "description": "Auslastung des Arbeitsspeichers in Prozent",
+              "nodes": {}
+            }
+          }
+      }
+      }
+    }
+  }
+}
