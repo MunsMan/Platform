@@ -2,6 +2,7 @@ from hashlib import md5
 import time
 import json
 import inspect
+from .Extensions import MQTTClient
 
 
 class BaseObject:
@@ -13,7 +14,8 @@ class BaseObject:
         self.id = self.__create_id_()
         self.__str__ = self.__get_classname()
         self.__bigger_node = None
-        self.__smaller_nodes = None
+        self.__smaller_nodes = []
+        self.__possible_data_sources = {"node": self.__get_data_from_node, "mqtt": MQTTClient}
 
     @classmethod
     def __get_classname(cls):
@@ -81,18 +83,15 @@ class BaseObject:
             print("Wrong Input, try again.")
 
     @property
-    def smaller_node(self):
+    def smaller_node(self) -> list:
         return self.__smaller_nodes
 
     @smaller_node.setter
-    def smaller_node(self, node):
+    def smaller_node(self, node) -> None:
         node_id = node.id
-        if self.__smaller_nodes is None:
-            self.__smaller_nodes = [node_id]
-        else:
-            self.__smaller_nodes.append(node_id)
+        self.__smaller_nodes.append(node_id)
 
-    def smaller_node_del(self, node):
+    def smaller_node_del(self, node) -> None:
         node_id = node.id
         nodes = self.smaller_node
         for i in range(len(self.__smaller_nodes)):
@@ -101,7 +100,7 @@ class BaseObject:
             else:
                 continue
 
-    def get_attribute(self):
+    def get_attribute(self) -> json:
         att = self.__dict__
         att_json = {}
         for a in att.keys():
@@ -117,6 +116,23 @@ class BaseObject:
         for i in j:
             self.__dict__[i] = j[i]
 
+    def get_source(self, source: str, type: str):
+        """
+            :param source: specifying the node or topic
+            :param type: information about the data source, for example MQTT or reference of a different node
+        """
+        if not type.lower() in self.__possible_data_sources.keys():
+            print("specified type of data source is not supported")
+            return False
+        else:
+            source_handler = self.__possible_data_sources[type]
+            source_handler = source_handler(source)
+
+    def __data_change_listener(self):
+        pass
+
+    def __get_data_from_node(self):
+        pass
 
 if __name__ == '__main__':
     FO = BaseObject("Aquarium")
