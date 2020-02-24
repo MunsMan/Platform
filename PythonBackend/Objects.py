@@ -2,13 +2,13 @@ from hashlib import md5
 import time
 import json
 import inspect
-from Extensions import MQTTClient
+from Extensions import MQTTClient, CustomDataHandler
 from typing import Dict, List
 
 
 class BaseObject:
     def __init__(self, name=None):
-        self.__data = None
+        self.__data = {}
         self.__address = None
         self.name = name
         self.description = None
@@ -45,7 +45,7 @@ class BaseObject:
 
     @data.setter
     def data(self, data):
-        self.__data = data
+        self.__data.update(data)
         self.__on_change_handler(data)
 
     def subscribe_to_data(self, handler):
@@ -134,16 +134,16 @@ class BaseObject:
     def __data_change_listener(self, data_source, type):
         pass
 
-    def __get_data_from_node(self, source):
-        node = self.children_search(source[0])
-        if source[1] is None:
-            node.subscribe_to_data(self._base_node_handler)
-        else:
-            node.subscribe_to_data(source[1])
-
-    def _base_node_handler(self, data):
-        print(data)
+    def _set_data(self, data):
         self.data = data
+
+    def _get_data(self):
+        return self.data
+
+    def __get_data_from_node(self, source):
+        C = CustomDataHandler(self._set_data, self._get_data, source[1])
+        node = self.children_search(source[0])
+        node.subscribe_to_data(C.custom_runner)
 
     def __get_data_from_mqtt(self, source):
         mqtt_client = MQTTClient(device_name=source[0])
@@ -181,7 +181,22 @@ if __name__ == '__main__':
     Pumpe.smaller_node = Motor
     Motor.bigger_node = Pumpe
 
-    source = [Pumpe.id, None]
+    def custom_func(old_data, new_data):
+        import time
+        print(new_data, old_data)
+        if len(old_data) == 0:
+            new_data.update({'timestamp': time.time()})
+            return new_data
+        elif old_data['run'] is True:
+            if new_data['run'] is False:
+                print("this")
+                new_data.update({"last_run_time_length": time.time() - old_data['timestamp'], 'timestamp': time.time()})
+        elif old_data['run'] is False:
+            if new_data['run'] is True:
+                new_data.update({"last_off_time_length": time.time() - old_data['timestamp'], 'timestamp': time.time()})
+        return new_data
+
+    source = [Pumpe.id, custom_func]
     Aquarium.get_source(source, 'node')
-    Pumpe.data = 1
+    Pumpe.data = {'run': True}
     print("Aquarium Data:", Aquarium.data)
