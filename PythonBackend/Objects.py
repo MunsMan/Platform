@@ -80,10 +80,10 @@ class BaseObject:
 
     def change_bigger_node(self, node_id):
         ui = input("Are you sure to change the hierarchy? (y/n)")
-        if ui is "y":
+        if ui == "y":
             self.__bigger_node = None
             self.address = node_id
-        elif ui is "n":
+        elif ui == "n":
             pass
         else:
             print("Wrong Input, try again.")
