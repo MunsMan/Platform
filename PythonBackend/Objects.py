@@ -75,6 +75,7 @@ class BaseObject:
         node_id = node.id
         if self.bigger_node is None:
             self.__bigger_node = node_id
+            return True
         else:
             self.change_bigger_node(node_id)
 
@@ -99,7 +100,6 @@ class BaseObject:
 
     def smaller_node_del(self, node) -> None:
         node_id = node.id
-        nodes = self.smaller_node
         if node_id in self.__smaller_nodes.keys():
             self.smaller_node.pop(node_id)
 
@@ -183,20 +183,21 @@ if __name__ == '__main__':
 
     def custom_func(old_data, new_data):
         import time
-        print(new_data, old_data)
         if len(old_data) == 0:
-            new_data.update({'timestamp': time.time()})
+            new_data.update({"timestamp": time.time()})
             return new_data
-        elif old_data['run'] is True:
-            if new_data['run'] is False:
+        elif old_data["run"] is True:
+            if new_data["run"] is False:
                 print("this")
-                new_data.update({"last_run_time_length": time.time() - old_data['timestamp'], 'timestamp': time.time()})
-        elif old_data['run'] is False:
-            if new_data['run'] is True:
-                new_data.update({"last_off_time_length": time.time() - old_data['timestamp'], 'timestamp': time.time()})
-        return new_data
+                new_data.update({"last_run_time_length": time.time() - old_data["timestamp"], "timestamp": time.time()})
+        elif old_data["run"] is False:
+            if new_data["run"] is True:
+                new_data.update({"last_off_time_length": time.time() - old_data["timestamp"], "timestamp": time.time()})
+        return json.dumps(new_data)
+
 
     source = [Pumpe.id, custom_func]
-    Aquarium.get_source(source, 'node')
-    Pumpe.data = {'run': True}
+    Aquarium.get_source(source, "node")
+    Pumpe.data = {"run": True}
     print("Aquarium Data:", Aquarium.data)
+    print(Aquarium.get_attribute())

@@ -94,8 +94,7 @@ class SpecialPrint:
         print("-" * level, name)
 
 def cal_topic(tree, name, node):
-
-
+    pass
 
 
 if __name__ == '__main__':
